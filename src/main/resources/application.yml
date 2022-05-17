@@ -1,0 +1,6 @@
+server:
+  port: 1234
+  servlet:
+    session:
+      timeout: 60000
+    context-path: /makeId

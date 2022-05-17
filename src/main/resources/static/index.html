@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试ID生成</title>
+</head>
+<body>
+<div id="getId">
+    节点名称:<input type="text" v-model="nodeName" name="nodeName" >
+    生成的ID:<input type="text" v-model="id" name="id">
+    <input type="button" @click="openId" placeholder="开启服务">
+    <input type="button" @click="closeId" placeholder="关闭服务">
+    <input type="button" @click="getId" placeholder="关闭服务">
+</div>
+<script src="js/vue.js"></script>
+<script src="js/axios.js"></script>
+<script type="text/javascript">
+    let v1 = new Vue({
+        el:"#getId",
+        data:{
+            nodeName:'',
+            id:'',
+            type:'NONE',
+        },
+        methods:{
+            openId:function (){
+                let params = new URLSearchParams();
+                params.append("nodeName",this.nodeName);
+                axios.post('openId',params).then(res =>{
+                    if (res.data.code === 0){
+                        alert("启动失败!原因是:" + res.data.msg);
+                    }else if (res.data.code === 1) {
+                        alert("服务开启成功");
+                    }
+                })
+            },
+            closeId:function () {
+                axios.post('closeId').then(res =>{
+                    if (res.data.code === 0){
+                        alert("关闭失败!原因是:" + res.data.msg);
+                    }else if (res.data.code === 1) {
+                        alert(res.data.msg);
+                    }
+                })
+            },
+            getId:function (){
+                let params = new URLSearchParams();
+                params.append('type',this.type);
+                axios.post('getId',params).then(res =>{
+                    if (res.data.code === 0){
+                        alert(res.data.msg);
+                    }else if (res.data.code === 1) {
+                        alert(res.data.msg);
+                        alert(res.data.result)
+                        this.id = res.data.result;
+                    }
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>
